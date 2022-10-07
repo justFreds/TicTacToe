@@ -1,12 +1,15 @@
 // TIC TAC TOE game between 2 players or player vs computer
 #include<stdio.h>
-#include <stdbool.h>
+#include <stdlib.h>
+#include <time.h>
+#include <ctype.h>
 
 
 //global variable
 char grid[3][3];
 const char USER = 'X';
 const char NPC = 'O';
+
 
 /****FUNCTION PROTOTYPES****/
 
@@ -17,40 +20,53 @@ void displayGrid();
 //check for a free space
 int checkFreeSpace();
 //function that gets users move
-void getUserMove(char *);
+void getUserMove();
 //function that gets computer move
 void getCompMove();
 //function that switches players turn
-void swapTurn(char *);
+//void swapTurn(char *);
 //check for game = win or draw
-void checkGameOver();
+char checkGameOver();
+void displayWinner(char);
 
 int main () {
     //Declerations and initializations
-    bool gameover = false;
-    int turnCounter = 0;
     //prompt user game they wish to play
-    printf("Welcome user!\nTicTacToe\n");
-    
-    //read information from console
+    char playAgain, winner = ' ';
+    printf("Welcome user!\nTicTacToe\n");    
 
     //initializeGrid
     initializeGrid(); 
     
-    //LOOP maybe do-while?
+    //LOOP
     do {
-        displayGrid();
-        getUserMove(&USER);
-        printf("\nGood!\n");
-        printf("Current status is: \n");
-        turnCounter++;
+            //displayGrid
+            //get move
+        while(winner == ' ' || checkFreeSpace() == 0) {
+            displayGrid();
+            getUserMove();
+            winner = checkGameOver();
+            if(winner != ' ' || checkFreeSpace == 0)
+            break;
 
+            getCompMove();
+            winner = checkGameOver();
+            if(winner != ' ' || checkFreeSpace == 0)
+            break;
+        }
 
-        swapTurn(&USER);
-    } while(gameover == true || checkFreeSpace() == 0);
+            displayGrid();
+            displayWinner(winner);
+
+            printf("\nPlay again? (Y/N)");
+            scanf("%c");
+            scanf("%c", &playAgain);       
+            playAgain = toupper(playAgain);
+            //swapTurn(&USER);
+        
+    } while(playAgain == 'Y');
     //
-    //displayGrid
-    //get move
+
     //check for winner or draw
     //END LOOP
 
@@ -77,28 +93,94 @@ void displayGrid() {
     printf("\n");
 }
 
-void getUserMove(char *turn) {
-    char *ptr = turn;
+void getUserMove() {
+    
     int x, y;
-    printf("Enter X,Y coordinates for your move(%c): ", *turn);
-    fflush(stdout);
-    scanf("%d %*c %d", &x, &y);
+    do {
+    printf("Enter X coordinates for your move: ");
+    scanf("%d", &x);
     x--;
+    printf("Enter Y coordinates for your move: ");
+    scanf("%d", &y);
     y--;
-    if(grid[x][y]!= ' ') {
-        printf("Invalid move!\n");
-        displayGrid();
-        getUserMove(ptr);
+    if(grid[x][y] != ' ') {
+        printf("Invalid move!\n");       
     }
     else {
-        grid[x][y] = *turn;
+        grid[x][y] = USER;
+        break;
     }
+    } while(grid[x][y]!= ' ');
 }
-void swapTurn(char *turn) {
+
+/* void swapTurn(char *turn) {
     if (*turn == 'X') {
         *turn == 'O';
     }
     else {
     *turn == 'X';
+    }
+} */
+
+int checkFreeSpace() {
+    int spaces = 9;
+    for(int i = 0; i <3; i++) {
+        for(int j = 0; j < 3; j++) {
+            if(grid[i][j]!= ' ') {
+                spaces--;
+            }
+        }
+    }
+    return spaces;
+}
+
+void getCompMove() {
+    srand(time(0));
+    int x, y;
+
+    if(checkFreeSpace() > 0) {
+        do {
+            x = rand() % 3;
+            y = rand() % 3;
+        } while(grid[x][y] != ' ');
+
+        grid[x][y] = NPC;
+    }
+    else {
+        displayWinner(' ');
+    }
+}
+
+char checkGameOver() {
+    //rows
+    for(int i = 0; i < 3; i++) {
+        if(grid[i][0] == grid[i][1] && grid[i][0] == grid[i][2]) {
+            return grid[i][0];
+        }
+    }
+    //columns
+    for(int i = 0; i < 3; i++) {
+        if(grid[0][i] == grid[1][i] && grid[0][i] == grid[2][i]) {
+            return grid[0][i];            
+        }
+    }
+    //diagnol    
+   if(grid[0][0] == grid[1][1] && grid[0][0] == grid[2][2]) {
+        return grid[0][0];        
+   }
+   if(grid[0][2] == grid[1][1] && grid[0][2] == grid[2][0]) {
+        return grid[0][2];        
+   }
+}
+
+void displayWinner(char winner) {
+    if(winner == USER) {
+        printf("\nYou win!");
+    }
+    else if(winner == NPC) {
+        printf("\nNPC wins!");
+    }
+    else {
+        printf("\nIt's a draw!");
     }
 }
