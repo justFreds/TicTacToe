@@ -42,7 +42,8 @@ int main () {
     do {
             //displayGrid
             //get move
-        while(winner == ' ' && checkFreeSpace() == 0) {
+        while(winner == ' ' && checkFreeSpace() != 0) {
+
             displayGrid();
             getUserMove();
             winner = checkGameOver();
@@ -59,6 +60,7 @@ int main () {
             displayWinner(winner);
 
             printf("\nPlay again? (Y/N) ");
+            scanf("%c");
             scanf("%c", &playAgain);      
             //swapTurn(&USER);
         
