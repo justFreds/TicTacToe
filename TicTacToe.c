@@ -42,7 +42,7 @@ int main () {
     do {
             //displayGrid
             //get move
-        while(winner == ' ' || checkFreeSpace() == 0) {
+        while(winner == ' ' && checkFreeSpace() == 0) {
             displayGrid();
             getUserMove();
             winner = checkGameOver();
@@ -58,13 +58,11 @@ int main () {
             displayGrid();
             displayWinner(winner);
 
-            printf("\nPlay again? (Y/N)");
-            scanf("%c");
-            scanf("%c", &playAgain);       
-            playAgain = toupper(playAgain);
+            printf("\nPlay again? (Y/N) ");
+            scanf("%c", &playAgain);      
             //swapTurn(&USER);
         
-    } while(playAgain == 'Y');
+    } while(playAgain == 'Y' || playAgain == 'y');
     //
 
     //check for winner or draw
@@ -124,9 +122,9 @@ void getUserMove() {
 
 int checkFreeSpace() {
     int spaces = 9;
-    for(int i = 0; i <3; i++) {
+    for(int i = 0; i < 3; i++) {
         for(int j = 0; j < 3; j++) {
-            if(grid[i][j]!= ' ') {
+            if(grid[i][j] != ' ') {
                 spaces--;
             }
         }
@@ -171,6 +169,7 @@ char checkGameOver() {
    if(grid[0][2] == grid[1][1] && grid[0][2] == grid[2][0]) {
         return grid[0][2];        
    }
+   return ' ';
 }
 
 void displayWinner(char winner) {
