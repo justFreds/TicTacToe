@@ -58,7 +58,7 @@ int main () {
 
             displayGrid();
             displayWinner(winner);
-
+            //ThisPart doesn't wait for response I can't figure out why?
             printf("\nPlay again? (Y/N) ");
             scanf("%c");
             scanf("%c", &playAgain);      
