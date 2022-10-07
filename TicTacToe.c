@@ -5,7 +5,8 @@
 
 //global variable
 char grid[3][3];
-const char USERTURN = 'X';
+const char USER = 'X';
+const char NPC = 'O';
 
 /****FUNCTION PROTOTYPES****/
 
@@ -13,30 +14,40 @@ const char USERTURN = 'X';
 void initializeGrid();
 //function that displays board
 void displayGrid();
+//check for a free space
+int checkFreeSpace();
 //function that gets users move
-void getUserMove();
+void getUserMove(char *);
 //function that gets computer move
 void getCompMove();
 //function that switches players turn
-void swapTurn();
-//check for winner
-void checkWin();
-//check for draw
-void checkDraw();
+void swapTurn(char *);
+//check for game = win or draw
+void checkGameOver();
 
 int main () {
     //Declerations and initializations
-
-
+    bool gameover = false;
+    int turnCounter = 0;
     //prompt user game they wish to play
-
+    printf("Welcome user!\nTicTacToe\n");
+    
     //read information from console
 
     //initializeGrid
-    initializeGrid();
-    displayGrid();
+    initializeGrid(); 
     
     //LOOP maybe do-while?
+    do {
+        displayGrid();
+        getUserMove(&USER);
+        printf("\nGood!\n");
+        printf("Current status is: \n");
+        turnCounter++;
+
+
+        swapTurn(&USER);
+    } while(gameover == true || checkFreeSpace() == 0);
     //
     //displayGrid
     //get move
@@ -64,4 +75,30 @@ void displayGrid() {
     }                       
     }        
     printf("\n");
+}
+
+void getUserMove(char *turn) {
+    char *ptr = turn;
+    int x, y;
+    printf("Enter X,Y coordinates for your move(%c): ", *turn);
+    fflush(stdout);
+    scanf("%d %*c %d", &x, &y);
+    x--;
+    y--;
+    if(grid[x][y]!= ' ') {
+        printf("Invalid move!\n");
+        displayGrid();
+        getUserMove(ptr);
+    }
+    else {
+        grid[x][y] = *turn;
+    }
+}
+void swapTurn(char *turn) {
+    if (*turn == 'X') {
+        *turn == 'O';
+    }
+    else {
+    *turn == 'X';
+    }
 }
